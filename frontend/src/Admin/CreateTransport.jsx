@@ -120,7 +120,7 @@ const CreateTransport = () => {
             <div className="col-sm-4">
               <AdminSideBar />
             </div>
-            <div className="col-sm-8 text-center text-dark">
+            <div className="col-sm-8 text-center text-dark main">
               <div className="form_container">
                 <h1 className="form_title">Create Transport</h1>
                 <Form onSubmit={handleSubmit}>
@@ -281,6 +281,12 @@ const Wrapper = styled.section`
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 800px;
     margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .form_container {
+      margin-top: 15px;
+    }
   }
 
   .form_title {

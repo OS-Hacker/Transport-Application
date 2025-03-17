@@ -127,15 +127,19 @@ const Navbar = () => {
               </li>
               <li>
                 {!authUser ? (
-                  <Link
+                  <NavLink
                     className="nav-link"
                     onClick={() => {
                       setShowLogin(true);
                       toggleMobileMenu();
                     }}
+                    style={{
+                      fontSize: "19px",
+                      fontWeight: "bold",
+                    }}
                   >
                     Login
-                  </Link>
+                  </NavLink>
                 ) : (
                   <Dropdown
                     menu={{ items }}

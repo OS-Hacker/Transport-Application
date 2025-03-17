@@ -84,7 +84,7 @@ const AdminDeshbored = () => {
             <div className="col-sm-4">
               <AdminSideBar />
             </div>
-            <div className="col-sm-8 text-center text-dark mb-5">
+            <div className="col-sm-8 text-center text-dark mb-5 main" >
               <h2>Transport Data</h2>
               {loading ? (
                 <Loading />
@@ -173,6 +173,12 @@ const Wrapper = styled.section`
     overflow-x: auto;
   }
 
+  @media (max-width: 768px) {
+    .main {
+      margin-top: 20px;
+    }
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -200,6 +206,4 @@ const Wrapper = styled.section`
     object-fit: cover;
     border-radius: 8px;
   }
-
- 
 `;
