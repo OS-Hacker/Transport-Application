@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useFilters } from "../context/FilterProvoder";
 import { AiFillCaretDown } from "react-icons/ai";
+import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const FilterNav = () => {
   const { selectedFilters, setSelectedFilters } = useFilters();
+  const { authUser } = useAuth();
 
   // State to manage dropdown visibility
   const [dropdownVisible, setDropdownVisible] = useState({
@@ -71,6 +74,43 @@ const FilterNav = () => {
   const vehicles = ["Truck", "Van", "Container", "Crane", "Bus", "Car"];
   const location = ["Bangalore", "Pune", "Mumbai", "Hyderabad"];
   const ratings = [1, 2, 3, 4, 5]; // Rating options
+
+  // form Handling
+  const [formData, setFormData] = useState({
+    name: "",
+    number: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (formData?.number?.length !== 10) {
+      toast.success("Please  Enter Valid Number", { position: "top-center" });
+      return;
+    }
+
+    if (!authUser?.user && !authUser?.token) {
+      toast("Please Login", { position: "top-center" });
+      return;
+    }
+
+    toast.success(`Thank U ${formData?.name} We Will Give Good Service`, {
+      position: "top-center",
+    });
+
+    setFormData({ name: "", number: "" });
+  };
 
   return (
     <Wrapper>
@@ -199,14 +239,26 @@ const FilterNav = () => {
         </div>
 
         <div className="form-wrap">
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit}>
             <div className="form-fields">
               <div className="form-group">
-                <input type="text" className="name" placeholder="Name*"></input>
+                <input
+                  type="text"
+                  required
+                  onChange={handleChange}
+                  value={formData.name}
+                  name="name"
+                  className="name"
+                  placeholder="Name*"
+                ></input>
               </div>
               <div className="form-group">
                 <input
                   type="number"
+                  required
+                  onChange={handleChange}
+                  value={formData.number}
+                  name="number"
                   className="phone"
                   placeholder="Mobile Number*"
                 ></input>

@@ -12,6 +12,7 @@ const AdminDeshbored = () => {
   const { authUser, setAuthUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
+  // Get All Users
   const getUsers = async () => {
     setLoading(true);
     try {
@@ -35,7 +36,7 @@ const AdminDeshbored = () => {
     getUsers();
   }, [authUser?.token]);
 
-  // Delete user
+  // Delete User
   const deleteHandler = async (id) => {
     try {
       const { data } = await axios.delete(

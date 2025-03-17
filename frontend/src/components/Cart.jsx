@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { useAuth } from "../context/AuthContext";
 import { useFilters } from "../context/FilterProvoder";
 import axios from "axios";
 import Loading from "./Loading";
 import { toast } from "react-toastify";
+import { gsap } from "gsap";
 
 const Cart = ({ showModal }) => {
   const { authUser } = useAuth();
@@ -12,13 +13,13 @@ const Cart = ({ showModal }) => {
   const [loading, setLoading] = useState(false);
   const [transports, setTransports] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
+  const cardRefs = useRef([]);
 
   const { vehicleType, load, popular, ratings, location, quickResponse } =
     selectedFilters;
 
   const fetchTransportData = useCallback(async () => {
     setLoading(true);
-    // Construct query parameters dynamically
     const queryParams = new URLSearchParams({
       vehicleType: vehicleType || "",
       load: load || "",
@@ -26,7 +27,7 @@ const Cart = ({ showModal }) => {
       ratings: ratings || "",
       location: location || "",
       quickResponse: quickResponse || "",
-      page: 1, // Change this dynamically if pagination is implemented
+      page: 1,
     });
     try {
       const { data } = await axios.get(
@@ -35,13 +36,13 @@ const Cart = ({ showModal }) => {
         }/get-transport?${queryParams.toString()}`,
         {
           headers: {
-            Authorization: `${authUser?.token}`, // Include token in request headers
+            Authorization: `${authUser?.token}`,
           },
         }
       );
 
-      setTransports(data?.transports || []); // Update transports
-      setTotalPages(data?.totalPages || 0); // Update total pages
+      setTransports(data?.transports || []);
+      setTotalPages(data?.totalPages || 0);
     } catch (err) {
       console.error("Error fetching transports:", err);
     } finally {
@@ -61,13 +62,43 @@ const Cart = ({ showModal }) => {
     fetchTransportData();
   }, [fetchTransportData]);
 
+  // GSAP Animation for Initial Card Render
+  useEffect(() => {
+    if (transports.length > 0) {
+      gsap.from(cardRefs.current, {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    }
+  }, [transports]);
+
+  // GSAP Animation for Filtered Cards
+  useEffect(() => {
+    if (transports.length > 0) {
+      gsap.to(cardRefs.current, {
+        opacity: 1,
+        y: 0,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    }
+  }, [transports]);
+
   return (
     <Wrapper>
       {loading ? (
         <Loading />
       ) : transports.length > 0 ? (
-        transports.map((transport) => (
-          <div className="card shadow-sm" key={transport?._id}>
+        transports.map((transport, index) => (
+          <div
+            className="card shadow-sm"
+            key={transport?._id}
+            ref={(el) => (cardRefs.current[index] = el)}
+          >
             <div className="image">
               <img
                 src={transport?.transportImage}
@@ -78,7 +109,6 @@ const Cart = ({ showModal }) => {
             <div className="card-body">
               <h3 className="card-title">{transport?.transportName}</h3>
               <div className="card-text">
-                {/* Display Ratings */}
                 <div className="rating mb-2">
                   <span
                     className="badge bg-success me-2 p-2"
@@ -88,28 +118,20 @@ const Cart = ({ showModal }) => {
                   </span>
                   <span className="text-muted">240 Ratings</span>
                 </div>
-
-                {/* Display Location */}
                 <div className="address mb-2" style={{ fontSize: "15px" }}>
                   <i className="bi bi-geo-alt-fill me-2"></i>
                   {transport?.location}
                 </div>
-
-                {/* Display Popular Tags */}
                 <div className="popular-tags mb-3">
                   {transport?.vehicleType?.map((tag, index) => (
                     <span key={index} className="badge bg-secondary me-2">
                       {tag}
                     </span>
                   ))}
-
-                  {/* Display Vehicle Type */}
                   <span className="badge bg-info me-2">
                     {transport?.load || "N/A"}
                   </span>
                 </div>
-
-                {/* Actions */}
                 <div className="actions">
                   <a
                     href={`tel:+91${transport?.contactNumber || "8805745188"}`}
@@ -128,9 +150,9 @@ const Cart = ({ showModal }) => {
                   <button
                     onClick={() => {
                       if (authUser?.user) {
-                        showModal(transport?._id); // Call the function to show the modal
+                        showModal(transport?._id);
                       } else {
-                        toast("Please Login", { position: "top-center" }); // Show toast if user is not logged in
+                        toast("Please Login", { position: "top-center" });
                       }
                     }}
                     className="btn btn-primary open-button"
@@ -172,6 +194,15 @@ const Wrapper = styled.section`
     overflow: hidden;
     width: 100%;
     max-width: 1100px;
+    opacity: 0; /* Initial opacity for GSAP animation */
+  }
+
+  img {
+    transition: transform 0.5s ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
   }
 
   .image {

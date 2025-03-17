@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image" href="./src/assets/Images/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- bootstrap CSS link -->
     <link
@@ -13,7 +13,10 @@
     />
 
     <!-- icon link -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
     <title>Transport</title>
   </head>
 
@@ -28,3 +31,25 @@
     ></script>
   </body>
 </html>
+
+<!-- Short Description Of Application  
+
+--- Frontend ---
+
+This is a transport application designed with a well-structured approach. I organized the project into two main sections: a frontend folder for the client-side code and a backend folder for server-side functionality.
+The frontend folder contains neatly organized subfolders to ensure maintainability:
+A components folder for reusable React components.
+An admin folder specifically for all admin-related components and functionality.
+A pages folder for defining individual page routes.
+For state management, I utilized the Context API, a built-in feature of React, to manage and share application state effectively across components.
+Styling was achieved with Bootstrap for responsive layouts and styled-components for custom, reusable styles written directly in JavaScript. Routing was handled using react-router-dom, enabling smooth navigation within the application.
+To enhance user experience, I integrated react-icons for visually appealing icons and GSAP to add dynamic animations like transitions and hover effects. These elements contribute to a modern, interactive user interface.
+
+ --- Backend ---
+
+In the backend, I follow the MVC (Model-View-Controller) architecture, which is a widely recognized and effective design pattern. To ensure maintainability and readability, I structured my application thoughtfully.
+First, I created a User model for user registration (signup) and login functionality. This is fully secured with middleware for route protection. For password security, I use bcrypt to hash passwords and JSON Web Tokens (JWT) to handle authentication and authorization, especially for admin-level permissions. These implementations safeguard user data and ensure only authorized users have access to specific resources.
+Next, I developed a Transport model to manage transportation-related data. This includes Create, Read, Update, and Delete (CRUD) operations, allowing seamless management of transport details.
+Additionally, I built a Booking model to handle booking functionality. Users can create bookings, retrieve their booking history, and view details. Admins have advanced controls, allowing them to view all bookings, update booking statuses (e.g., confirm or cancel), and manage other booking-related actions efficiently.
+I also ensured the backend is scalable, secure, and optimized for performance by implementing best practices like input validation, error handling, and database indexing for faster queries. This ensures the application is robust and reliable for both users and admins.
+-->

@@ -98,7 +98,7 @@ const AdminDeshbored = () => {
                         <th>Number</th>
                         <th>Vehicle Type</th>
                         <th>Location</th>
-                        <th colSpan={2}>Actions</th>
+                        <th colSpan={2} className="text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody>

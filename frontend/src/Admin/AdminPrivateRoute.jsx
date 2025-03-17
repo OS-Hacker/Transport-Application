@@ -18,7 +18,6 @@ const AdminPrivateRoute = () => {
           },
         }
       );
-      console.log(data);
 
       if (data?.ok) {
         return setOk(true);
