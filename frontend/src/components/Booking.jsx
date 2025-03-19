@@ -43,7 +43,7 @@ const Booking = () => {
           <LoadingWrapper>
             <Loading />
           </LoadingWrapper>
-        ) : bookings.length === 0 ? (
+        ) : bookings?.length === 0 ? (
           <LoadingWrapper>
             <NoDataMessage>No bookings found.</NoDataMessage>
           </LoadingWrapper>

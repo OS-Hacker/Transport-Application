@@ -13,7 +13,7 @@ const AdminDeshbored = () => {
   const [loading, setLoading] = useState(false); // For fetching data
   const [transports, setTransports] = useState([]);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Track which transport is being deleted
+  const [deletingId, setDeletingId] = useState(null); // Track which transport is being deleted
 
   // Fetch Transport Data
   const fetchTransportData = async () => {
@@ -30,6 +30,7 @@ const AdminDeshbored = () => {
       setTransports(data?.transports || []);
     } catch (err) {
       console.error("Error fetching transports:", err);
+      setError("Failed to fetch transports");
     } finally {
       setLoading(false);
     }
@@ -41,9 +42,8 @@ const AdminDeshbored = () => {
 
   // Delete transport
   const handleDeleteTransport = async (id) => {
-    setIsLoading(true);
+    setDeletingId(id); // Set the ID of the transport being deleted
     if (window.confirm("Are you sure you want to delete this transport?")) {
-      setDeletingId(id); // Set the ID of the transport being deleted
       try {
         const { data } = await axios.delete(
           `${import.meta.env.VITE_BASE_URL}/delete-transport/${id}`,
@@ -62,8 +62,10 @@ const AdminDeshbored = () => {
         console.error("Error deleting transport:", error);
         toast.error("Failed to delete transport");
       } finally {
-        setIsLoading(false); // Reset the deleting ID
+        setDeletingId(null); // Reset the deleting ID
       }
+    } else {
+      setDeletingId(null); // Reset the deleting ID if user cancels
     }
   };
 
@@ -84,7 +86,7 @@ const AdminDeshbored = () => {
             <div className="col-sm-4">
               <AdminSideBar />
             </div>
-            <div className="col-sm-8 text-center text-dark mb-5 main" >
+            <div className="col-sm-8 text-center text-dark mb-5 main">
               <h2>Transport Data</h2>
               {loading ? (
                 <Loading />
@@ -98,7 +100,9 @@ const AdminDeshbored = () => {
                         <th>Number</th>
                         <th>Vehicle Type</th>
                         <th>Location</th>
-                        <th colSpan={2} className="text-center">Actions</th>
+                        <th colSpan={2} className="text-center">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -131,9 +135,9 @@ const AdminDeshbored = () => {
                                 handleDeleteTransport(transport._id)
                               }
                               className="btn btn-danger btn-sm"
-                              disabled={isLoading} // Disable button while deleting
+                              disabled={deletingId === transport._id} // Disable button while deleting
                             >
-                              {isLoading ? (
+                              {deletingId === transport._id ? (
                                 <div
                                   className="spinner-border spinner-border-sm"
                                   role="status"

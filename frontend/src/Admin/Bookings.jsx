@@ -91,7 +91,7 @@ const Bookings = () => {
 
   // Function to truncate text
   const truncateText = (text, maxLength) => {
-    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+    return text?.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const Bookings = () => {
               <h1 className="text-center mt-4">Manage Bookings</h1>
               {isLoading ? (
                 <Loading />
-              ) : bookings.length === 0 ? (
+              ) : bookings?.length === 0 ? (
                 <p className="text-center mt-5" style={{ height: "100vh" }}>
                   No bookings found
                 </p>
